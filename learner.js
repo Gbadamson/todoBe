@@ -21,7 +21,15 @@ app.get("/todo", (req, res) => {
   });
 });
 //We are creating this so that we can be able to update a file on the todo server
-app.put("");
+app.put("/todo/:id/done", (req, res) => {
+  const id = req.params.id;
+
+  fs.readFile("./Store/todo.json", "utf-8", (err, data) => {
+    if (err) {
+      res.status(500).send("Oops! Server is displaying errors");
+    }
+  });
+});
 
 app.listen(port, () => {
   console.log("We are doing fine");
