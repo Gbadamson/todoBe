@@ -24,10 +24,26 @@ app.get("/todo", (req, res) => {
 app.put("/todo/:id/done", (req, res) => {
   const id = req.params.id;
 
+  const findtodo = (todo, id) => {
+    for (let i = 0; i < todo.length; i++) {
+      if (todo[i].id === id) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
   fs.readFile("./Store/todo.json", "utf-8", (err, data) => {
     if (err) {
       res.status(500).send("Oops! Server is displaying errors");
     }
+    const todo = JSON.parse(date);
+    const todoIndex = findtodo(todo, id);
+
+    if (todoIndex === -1) {
+      return res.status(404).send("Error!!!, Page not found");
+    }
+    return res.json(todo[todoIndex]);
   });
 });
 
