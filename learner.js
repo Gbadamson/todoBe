@@ -26,7 +26,7 @@ app.put("/todo/:id/done", (req, res) => {
 
   const findtodo = (todo, id) => {
     for (let i = 0; i < todo.length; i++) {
-      if (todo[i].id === id) {
+      if (todo[i].id === parseInt(id)) {
         return i;
       }
     }
@@ -37,13 +37,18 @@ app.put("/todo/:id/done", (req, res) => {
     if (err) {
       res.status(500).send("Oops! Server is displaying errors");
     }
-    const todo = JSON.parse(date);
+    let todo = JSON.parse(data);
     const todoIndex = findtodo(todo, id);
 
     if (todoIndex === -1) {
       return res.status(404).send("Error!!!, Page not found");
     }
-    return res.json(todo[todoIndex]);
+
+    todo[todoIndex].complete = true;
+
+    fs.writeFile("./Store/todo.json", JSON.stringify(todo), () => {
+      return res.json({ status: "ok" });
+    });
   });
 });
 
